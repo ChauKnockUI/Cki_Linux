@@ -5,24 +5,43 @@ function App() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
 
+
   useEffect(() => {
-    fetch('/api/users')
+    fetch(`http://localhost:3000/api/users`) // Đảm bảo cú pháp đúng
       .then((res) => res.json())
       .then((data) => setUsers(data));
   }, []);
 
-  const addUser = async (e) => {
-    e.preventDefault();
-    await fetch('/api/users', {
+const addUser = async (e) => {
+  console.log("Sending data to server:", { name, email });
+
+  e.preventDefault();
+
+  // Log thông tin gửi qua server và URL
+  console.log('URL:', `${API_URL}/api/users`);
+  console.log('Data being sent:', { name, email });
+
+  try {
+    const response = await fetch(`http://localhost:3000/api/users`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name, email }),
     });
+
+    const data = await response.json();
+    console.log('Response data:', data);
+
+    // Clear the form after submission
     setName('');
     setEmail('');
-    const updatedUsers = await fetch('/api/users').then((res) => res.json());
+
+    // Fetch updated users list
+    const updatedUsers = await fetch(`http://localhost:3000/api/users`).then((res) => res.json());
     setUsers(updatedUsers);
-  };
+  } catch (error) {
+    console.error('Error:', error);
+  }
+};
 
   return (
     <div>
@@ -44,7 +63,7 @@ function App() {
       </form>
       <ul>
         {users.map((user) => (
-          <li key={user.id}>(${user.name}) (${user.email})&rbrace;</li>
+          <li key={user.id}>{user.name} ({user.email})</li>
         ))}
       </ul>
     </div>

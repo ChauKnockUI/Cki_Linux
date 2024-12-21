@@ -56,7 +56,7 @@ app.get('/api/users', async (req, res) => {
 // API: Thêm user
 app.post('/api/users', async (req, res) => {
   const { name, email } = req.body;
-  console.log(`Received name: ${name}, email: ${email}`);
+  console.log(`Received name: ${name}, email: ${email}`); // Kiểm tra xem dữ liệu đã được gửi đúng chưa
   try {
     await pool.query('INSERT INTO users (name, email) VALUES (?, ?)', [name, email]);
     res.status(201).send('User added');
@@ -65,6 +65,7 @@ app.post('/api/users', async (req, res) => {
     res.status(500).send('Error adding user');
   }
 });
+
 
 // Khởi tạo server và kết nối database
 const PORT = 3000;
