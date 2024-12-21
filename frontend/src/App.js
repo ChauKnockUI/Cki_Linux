@@ -17,8 +17,7 @@ const addUser = async (e) => {
 
   e.preventDefault();
 
-  // Log thông tin gửi qua server và URL
-  console.log('URL:', `${API_URL}/api/users`);
+  
   console.log('Data being sent:', { name, email });
 
   try {
