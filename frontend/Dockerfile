@@ -1,20 +1,22 @@
-# Use Node.js image
-FROM node:16
+# Bước 1: Build ứng dụng React
+FROM node:16 AS build
 
-# Set working directory
-WORKDIR /usr/src/app
-
-# Copy package.json and package-lock.json
+WORKDIR /app
 COPY package*.json ./
-
-# Install dependencies
 RUN npm install
-RUN npm install web-vitals
-# Copy the rest of the source files
 COPY . .
+RUN npm run build  # Build ứng dụng React
 
-# Expose port
-EXPOSE 3000
+# Bước 2: Sử dụng NGINX để phục vụ ứng dụng đã build
+FROM nginx:latest
 
-# Start the application
-CMD ["npm", "start"]
+# Copy các file build của frontend vào thư mục mặc định của NGINX
+COPY --from=build /app/build /usr/share/nginx/html
+
+COPY ./nginx/default.conf /etc/nginx/conf.d/
+
+# Expose port 80
+EXPOSE 80
+
+# Start NGINX
+CMD ["nginx", "-g", "daemon off;"]

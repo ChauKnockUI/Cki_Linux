@@ -7,7 +7,7 @@ function App() {
 
 
   useEffect(() => {
-    fetch(`http://localhost:3000/api/users`) // Đảm bảo cú pháp đúng
+    fetch(`http://backend:3000/api/users`) // Đảm bảo cú pháp đúng
       .then((res) => res.json())
       .then((data) => setUsers(data));
   }, []);
@@ -17,11 +17,10 @@ const addUser = async (e) => {
 
   e.preventDefault();
 
-  
   console.log('Data being sent:', { name, email });
 
   try {
-    const response = await fetch(`http://localhost:3000/api/users`, {
+    const response = await fetch(`http://backend:3000/api/users`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name, email }),
@@ -35,7 +34,7 @@ const addUser = async (e) => {
     setEmail('');
 
     // Fetch updated users list
-    const updatedUsers = await fetch(`http://localhost:3000/api/users`).then((res) => res.json());
+    const updatedUsers = await fetch(`http://backend:3000/api/users`).then((res) => res.json());
     setUsers(updatedUsers);
   } catch (error) {
     console.error('Error:', error);
